@@ -11,7 +11,7 @@ Original file is located at
 
 
 # ✅ 1. 라이브러리 설치
-!pip install --upgrade gspread gspread_dataframe
+# !pip install --upgrade gspread gspread_dataframe
 
 # ✅ 2. 기본 라이브러리
 import requests
