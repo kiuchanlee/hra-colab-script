@@ -27,7 +27,7 @@ jobs:
 
       # 서비스 계정 파일 생성 단계 추가
       - name: 서비스 계정 파일 생성
-        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > service-account.json
+        run: echo '${{ secrets.GCP_CREDENTIALS_JSON }}' > service-account.json
       
           
 
