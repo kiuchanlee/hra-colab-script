@@ -25,5 +25,11 @@ jobs:
           # Colab 노트북 실행에 필요한 패키지들
           pip install numpy pandas matplotlib scikit-learn
 
+      # 서비스 계정 파일 생성 단계 추가
+      - name: 서비스 계정 파일 생성
+        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > service-account.json
+      
+          
+
       - name: Run Python script
         run: python hra_news.py  # 여기를 실제 파일 이름으로 변경하세요
