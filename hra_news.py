@@ -105,12 +105,17 @@ def crawl_news(query, category, start_date, end_date, max_page=1):
                     raw_date = date_tag.get_text().strip() if date_tag else ""
 
                     try:
-                       dt = datetime.strptime(raw_date, "%Y.%m.%d. %p %I:%M")
-                       # 일요일=0, 월~토=1~6
-                       weekday_kor = ["일", "월", "화", "수", "목", "금", "토"][(dt.weekday() + 1) % 7]
-                       formatted_date = dt.strftime(f"%m.%d({weekday_kor})")
-                    except:
-                       formatted_date = raw_date
+                        # 한글 오전/오후 → 영어 AM/PM으로 변환
+                        raw_date_fixed = raw_date.replace("오전", "AM").replace("오후", "PM")
+                        dt = datetime.strptime(raw_date_fixed, "%Y.%m.%d. %p %I:%M")
+
+                        # 일요일=0, 월~토=1~6 → 한국식 요일로 변환
+                        weekday_kor = ["일", "월", "화", "수", "목", "금", "토"][(dt.weekday() + 1) % 7]
+                        formatted_date = dt.strftime(f"%m.%d({weekday_kor})")
+
+                    except Exception as e:
+                        # 파싱 실패 시 원본 그대로 사용
+                        formatted_date = raw_date
 
 
                     results.append({
@@ -173,15 +178,38 @@ df_total = pd.concat(all_results, ignore_index=True)
 df_total = df_total.drop_duplicates(subset=["헤드라인"])
 df_total = df_total[["구분", "키워드", "일자", "헤드라인", "본문", "매체명", "URL"]]
 df_total = df_total.sort_values(by=["구분", "일자", "헤드라인"], ascending=[True, False, True])
+# 12-1) 필요한 컬럼만 추출
+df_new = df_total[["구분", "일자", "헤드라인", "본문", "매체명", "중요여부", "주요내용", "요약"]].copy()
 
-# ✅ 9. Google 시트 업로드 (덮어쓰기)
-sheet_id = "1OEUq2ZCt0WeZv3aUTYaqcy91YO-05LtUjhXJj0GRRyg"
-sheet_name = "네이버크롤링2"
+# 12-2) '구분'에 대한 카테고리 순서 지정
+category_order = ["채용", "노사", "임금", "제도", "복지", "관계사", "현대해상", "DB손보", "KB손보", "메리츠"]
+df_new["구분"] = pd.Categorical(df_new["구분"], categories=category_order, ordered=True)
 
+# 12-3) 정렬: 구분(위 순서대로), 일자(내림차순), 헤드라인(내림차순)
+df_new = df_new.sort_values(
+    by=["구분", "일자", "헤드라인"],
+    ascending=[True, False, False]
+)
+
+print("\n🎉 전체 작업 완료!")
+
+
+# ✅ 13. Google 시트 업로드 (덮어쓰기)
+sheet_id = "1l89Eca3CsjLEjG-9_raVMy6Y_sYE4BLA-XRtgwEhHEc"
+sheet_name = "설명"
+
+
+# 시트 불러오기
 sheet = gc.open_by_key(sheet_id)
 worksheet = sheet.worksheet(sheet_name)
-worksheet.clear()
-set_with_dataframe(worksheet, df_total)
+
+# ✅ A3 이후만 지우기
+worksheet.batch_clear(["A3:Z"])
+
+# ✅ A3 셀부터 DataFrame 저장
+set_with_dataframe(worksheet, df_total, row=3, col=1)
+worksheet.update("A2", [[f"업데이트 시각: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"]])
+
 
 print("✅ Google 스프레드시트 저장 완료!")
 print("🔗 링크:", sheet.url)
