@@ -6,3 +6,12 @@ papermill
 nbconvert
 gspread
 gspread_dataframe
+requests
+beautifulsoup4
+pandas
+gspread
+gspread_dataframe
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
