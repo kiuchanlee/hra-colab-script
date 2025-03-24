@@ -104,13 +104,13 @@ def crawl_news(query, category, start_date, end_date, max_page=1):
                     date_tag = article_soup.select_one("span.media_end_head_info_datestamp_time")
                     raw_date = date_tag.get_text().strip() if date_tag else ""
 
-                   try:
-                      dt = datetime.strptime(raw_date, "%Y.%m.%d. %p %I:%M")
-                      # 일요일=0, 월~토=1~6
-                      weekday_kor = ["일", "월", "화", "수", "목", "금", "토"][(dt.weekday() + 1) % 7]
-                      formatted_date = dt.strftime(f"%m.%d({weekday_kor})")
-                   except:
-                      formatted_date = raw_date
+                    try:
+                       dt = datetime.strptime(raw_date, "%Y.%m.%d. %p %I:%M")
+                       # 일요일=0, 월~토=1~6
+                       weekday_kor = ["일", "월", "화", "수", "목", "금", "토"][(dt.weekday() + 1) % 7]
+                       formatted_date = dt.strftime(f"%m.%d({weekday_kor})")
+                    except:
+                       formatted_date = raw_date
 
 
                     results.append({
