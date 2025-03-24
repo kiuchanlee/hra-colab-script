@@ -16,7 +16,6 @@ Original file is located at
 """
 #콜랩 수정본
 # ✅ 1. 라이브러리 설치 - 주석 처리하거나 제거
-# !pip install --upgrade gspread gspread_dataframe
 
 # ✅ 2. 기본 라이브러리
 import requests
