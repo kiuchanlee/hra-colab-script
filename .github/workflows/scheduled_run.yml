@@ -32,4 +32,8 @@ jobs:
         EOF
 
     - name: Run Python script
-      run: python hra_news.py  # 여기를 실제 스크립트 파일명으로 맞추세요
+      run: python hra_news_step1.py  # 여기를 실제 스크립트 파일명으로 맞추세요
+
+
+    - name: Run Python script
+      run: python hra_news_step2.py  # 여기를 실제 스크립트 파일명으로 맞추세요
