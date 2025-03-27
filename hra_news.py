@@ -29,16 +29,19 @@ import gspread
 from gspread_dataframe import set_with_dataframe
 from google.oauth2.service_account import Credentials
 
-# 서비스 계정을 사용한 인증 방식으로 변경
+# 서비스 계정을 사용한 인증 방식
 def authenticate_gspread():
-    # GitHub Secrets에서 설정한 서비스 계정 키 파일 사용
-    scope = ['https://spreadsheets.google.com/feeds',
-             'https://www.googleapis.com/auth/drive']
+    # 인증 범위 (gspread + Google Drive)
+    scopes = [
+        'https://www.googleapis.com/auth/spreadsheets',
+        'https://www.googleapis.com/auth/drive'
+    ]
     
-    # 서비스 계정 JSON 파일 경로
-    creds = Credentials.from_service_account_file('service-account.json', scopes=scope)
+    # GitHub Actions에서 생성한 creds.json 사용
+    creds = Credentials.from_service_account_file('creds.json', scopes=scopes)
     return gspread.authorize(creds)
 
+# gspread client 객체 생성
 gc = authenticate_gspread()
 
 # ✅ 4. 뉴스 크롤링 함수
