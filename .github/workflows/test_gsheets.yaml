@@ -1,14 +1,14 @@
-name: Test Google Sheet
+name: Google Sheets Test
 
 on:
-  workflow_dispatch:  # 수동 실행용 트리거
+  workflow_dispatch:
 
 jobs:
-  test-write:
+  test-sheet:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout
       uses: actions/checkout@v3
 
     - name: Set up Python
@@ -20,9 +20,11 @@ jobs:
       run: |
         pip install gspread google-auth
 
-    - name: Decode service account
+    - name: Create creds.json properly
       run: |
-      echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 --decode > creds.json
+        cat <<EOF > creds.json
+        ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        EOF
 
-    - name: Run sheet update script
+    - name: Run script
       run: python update_sheet.py
