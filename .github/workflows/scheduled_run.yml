@@ -2,14 +2,12 @@ name: Run Python Script Daily
 
 on:
   schedule:
-    # 매일 오전 9시에 실행 (UTC 기준, 한국 시간으로는 오후 6시)
     - cron: '0 9 * * *'
-  workflow_dispatch:  # 수동 실행 옵션 추가
-
-on:
+  workflow_dispatch:
   push:
     branches:
-      - main  # 또는 'master'
+      - main
+
 
 jobs:
   run-script:
