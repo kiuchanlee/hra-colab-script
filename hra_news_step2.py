@@ -6,6 +6,7 @@ from typing import List
 from openai import OpenAI
 from google.oauth2.service_account import Credentials
 import gspread
+import re
 from gspread_dataframe import set_with_dataframe
 
 # ✅ 인증 설정
