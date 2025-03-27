@@ -116,52 +116,52 @@ df_total = deduplicate_news_with_gpt_twopass(df_total)
 
 
 
-# ✅ 9. 3줄 요약 함수
-def summarize_all_in_3_lines(df):
-    df["주요내용"] = ""
+# # ✅ 9. 3줄 요약 함수
+# def summarize_all_in_3_lines(df):
+#     df["주요내용"] = ""
 
-    print(f"\n📌 [1단계] 전체 기사 3줄 요약 시작 (총 {len(df)}건)")
+#     print(f"\n📌 [1단계] 전체 기사 3줄 요약 시작 (총 {len(df)}건)")
 
-    for idx, row in df.iterrows():
-        content = row["본문"]
-        if not isinstance(content, str) or not content.strip():
-            print(f"⚠️ 본문 없음 (idx={idx}) → 건너뜀")
-            continue
+#     for idx, row in df.iterrows():
+#         content = row["본문"]
+#         if not isinstance(content, str) or not content.strip():
+#             print(f"⚠️ 본문 없음 (idx={idx}) → 건너뜀")
+#             continue
 
-        prompt =  f"""너는 뉴스 요약 전문 Assistant야.
+#         prompt =  f"""너는 뉴스 요약 전문 Assistant야.
 
-                    다음 뉴스 본문을 3줄 이내로 요약해줘.
+#                     다음 뉴스 본문을 3줄 이내로 요약해줘.
 
-                    - 헤드라인처럼 간결하고 핵심적인 내용 위주로 정리해.
-                    - 주어는 생략하거나 최소화하고, 중요한 정보부터 전달해.
-                    - 각 문장은 반드시 '~다'로 끝나는 서술형이어야 해.
-                    - '~요'나 '~합니다' 같은 어투는 사용하지 마.
-                    - 너의 생각보다는 사실을 알려주는데 중점을 두고 작성해줘.
-                    - 설명조보다는 보도 문장 스타일로 써줘.
-                    - 불필요한 수식어나 배경 설명은 생략해도 좋아.
+#                     - 헤드라인처럼 간결하고 핵심적인 내용 위주로 정리해.
+#                     - 주어는 생략하거나 최소화하고, 중요한 정보부터 전달해.
+#                     - 각 문장은 반드시 '~다'로 끝나는 서술형이어야 해.
+#                     - '~요'나 '~합니다' 같은 어투는 사용하지 마.
+#                     - 너의 생각보다는 사실을 알려주는데 중점을 두고 작성해줘.
+#                     - 설명조보다는 보도 문장 스타일로 써줘.
+#                     - 불필요한 수식어나 배경 설명은 생략해도 좋아.
 
-                    {content}"""
+#                     {content}"""
 
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "뉴스 3줄 요약기"},
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            summary = response.choices[0].message.content.strip()
-            df.at[idx, "주요내용"] = summary
-            print(f"✅ 요약 완료 (idx={idx}, 헤드라인: {row['헤드라인'][:10]})")
+#         try:
+#             response = client.chat.completions.create(
+#                 model="gpt-4o-mini",
+#                 messages=[
+#                     {"role": "system", "content": "뉴스 3줄 요약기"},
+#                     {"role": "user", "content": prompt}
+#                 ]
+#             )
+#             summary = response.choices[0].message.content.strip()
+#             df.at[idx, "주요내용"] = summary
+#             print(f"✅ 요약 완료 (idx={idx}, 헤드라인: {row['헤드라인'][:10]})")
 
-        except Exception as e:
-            print(f"⚠️ 요약 실패 (idx={idx}): {e}")
-            continue
+#         except Exception as e:
+#             print(f"⚠️ 요약 실패 (idx={idx}): {e}")
+#             continue
 
-    print("\n📌 전체 기사 3줄 요약 완료")
-    return df
+#     print("\n📌 전체 기사 3줄 요약 완료")
+#     return df
 
-df_total = summarize_all_in_3_lines(df_total)
+# df_total = summarize_all_in_3_lines(df_total)
 
 # ✅ 10. 중요 기사 선별 함수
 
