@@ -15,7 +15,7 @@ gc = gspread.authorize(creds)
 
 # ✅ OpenAI 설정
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")  # GitHub Actions에서는 secrets로 설정
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  
 
 # ✅ CSV 불러오기
 df_total = pd.read_csv("crawled_news.csv")
