@@ -37,3 +37,5 @@ jobs:
 
     - name: Run Python script
       run: python hra_news_step2.py  # 여기를 실제 스크립트 파일명으로 맞추세요
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
