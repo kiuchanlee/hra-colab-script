@@ -1,0 +1,28 @@
+name: Test Google Sheet
+
+on:
+  workflow_dispatch:  # 수동 실행용 트리거
+
+jobs:
+  test-write:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install gspread google-auth
+
+    - name: Decode service account key
+      run: |
+        echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > creds.json
+
+    - name: Run Google Sheet test script
+      run: python update_sheet.py
