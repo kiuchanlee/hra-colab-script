@@ -20,9 +20,9 @@ jobs:
       run: |
         pip install gspread google-auth
 
-    - name: Decode service account key
+    - name: Decode service account
       run: |
-        echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > creds.json
+      echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 --decode > creds.json
 
-    - name: Run Google Sheet test script
+    - name: Run sheet update script
       run: python update_sheet.py
