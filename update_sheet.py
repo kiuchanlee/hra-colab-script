@@ -15,7 +15,7 @@ def test_google_sheet_write():
 
     # 🔗 여기에 테스트할 Google Sheet URL 또는 ID를 넣어주세요
     SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1oqBSysH1OUZ6A97JfMciO2A0jH2CRi_C2KWiEvHSekU"
-    worksheet = client.open_by_url(SPREADSHEET_URL).시트1
+    worksheet = client.open_by_url(SPREADSHEET_URL).sheet1
 
     # 샘플 데이터 작성
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
