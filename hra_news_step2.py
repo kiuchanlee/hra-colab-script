@@ -247,10 +247,10 @@ def analyze_articles_batch(df, batch_size=5, max_retries=5):
                     df.at[original_idx, "경제/산업 관련"] = values[3]
                     df.at[original_idx, "보험/금융 관련"] = values[4]
 
-                    relevance_score = values.count("O")
+                    relevance_score = values.count("V")
                     df.at[original_idx, "중요도"] = relevance_score
                     if relevance_score >= 3:
-                        df.at[original_idx, "중요여부"] = "O"
+                        df.at[original_idx, "중요여부"] = "V"
 
                     success += 1
                 else:
