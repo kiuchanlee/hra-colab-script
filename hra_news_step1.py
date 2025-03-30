@@ -43,7 +43,7 @@ def crawl_news(query, category, start_date, end_date, max_page=1):
 
         url = (
             f"https://search.naver.com/search.naver?where=news&query={query}"
-            f"&pd=4&ds={start_date}&de={end_date}&office_type=1&office_category=1,3"
+            f"&pd=4&ds={start_date}&de={end_date}&office_type=1&office_category=1"
             f"&sort=0&news_office_checked={media_codes}&start={start}"
         )
 
