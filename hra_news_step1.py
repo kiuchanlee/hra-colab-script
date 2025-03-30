@@ -42,9 +42,9 @@ def crawl_news(query, category, start_date, end_date, max_page=1):
         print(f"\n📄 [{category} - {query}] 페이지 {((start - 1)//10) + 1} 크롤링 중...")
 
         url = (
-            f"https://search.naver.com/search.naver?where=news&query={query}"
-            f"&pd=4&ds={start_date}&de={end_date}&office_type=1&office_category=1"
-            f"&sort=0&news_office_checked={media_codes}&start={start}"
+        f"https://search.naver.com/search.naver?where=news&query={query}"
+        f"&pd=4&ds={start_date}&de={end_date}&office_type=1&office_section_code=1"
+        f"&sort=0&news_office_checked={media_codes}&start={start}"
         )
 
         try:
