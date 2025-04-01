@@ -44,7 +44,7 @@ def crawl_news(query, category, start_date, end_date, max_page=1):
         url = (
         f"https://search.naver.com/search.naver?where=news&query={query}"
         f"&pd=4&ds={start_date}&de={end_date}&office_type=1&office_section_code=1"
-        f"&sort=0&news_office_checked={media_codes}&start={start}"
+        f"&sort=0&start={start}"
         )
 
         try:
@@ -180,14 +180,44 @@ for group in keywordGroups:
         df = crawl_news(keyword, group["category"], start_date, end_date, max_page=1)
         all_results.append(df)
 
+media_codes = [
+    # 🗞️ 주요일간지
+    "023",  # 조선일보
+    "025",  # 중앙일보
+    "020",  # 동아일보
+    "032",  # 경향신문
+    "028",  # 한겨레
+    "015",  # 한국경제
+    "009",  # 매일경제
+    "001",  # 연합뉴스
+    "469",  # 한국일보
 
+
+    # 💰 경제 전문지/경제 매체
+    "366",  # 조선비즈
+    "277",  # 아시아경제
+    "243",  # 이코노미스트 
+    "018", # 이데일리 
+    "016",  # 헤럴드경제
+    "014",  # 파이낸셜뉴스
+    "008",  # 머니투데이
+
+    # 📰 경제 주간지 / 시사주간지(경제 중심)
+    "024",  # 매경이코노미
+    "050",  # 한경비즈니스
+    "037",  # 주간동아
+    "308",  # 시사IN
+    "051",  # 주간조선
+]
 
 # ✅ 데이터 정리
 df_total = pd.concat(all_results, ignore_index=True)
 df_total = df_total.drop_duplicates(subset=["URL"])
+# 3. article/다음 세자리 숫자 추출
+df_total["media_code"] = df_total["URL"].str.extract(r'article/(\d{3})/')
+df_total = df_total[df_total["media_code"].isin(media_codes)]
 df_total = df_total[["구분", "키워드", "일자", "헤드라인", "본문", "매체명", "URL"]]
 df_total['헤드라인'] = df_total['헤드라인'].str.replace(r"\[.*?\]", "", regex=True).str.strip()
 df_total = df_total.sort_values(by=["구분", "일자", "헤드라인"], ascending=[True, False, True])
-
 df_total.to_csv("crawled_news.csv", index=False)
 print("\n✅ 크롤링 완료 및 csv 저장!")
