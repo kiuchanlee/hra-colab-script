@@ -42,11 +42,13 @@ def main():
     # 2. 언론사 도메인 → 한글 언론사명 매핑
     domain_to_korean = {
         "www.chosun.com": "조선일보",
-        "www.biz.chosun.com": "조선비즈",
-        "www.weekly.chosun.com": "주간조선",
+        "biz.chosun.com": "조선비즈",
+        "weekly.chosun.com": "주간조선",
         "www.joins.com": "중앙일보",
         "www.donga.com": "동아일보",
+        "weekly.donga.com": "주간동아",
         "www.khan.co.kr": "경향신문",
+        "weekly.khan.co.kr": "주간경향",
         "www.hani.co.kr": "한겨레",
         "www.hankyung.com": "한국경제",
         "www.mk.co.kr": "매일경제",
