@@ -162,7 +162,7 @@ def summarize_all_in_3_lines(df):
     print("\n📌 전체 기사 3줄 요약 완료")
     return df
 
-df_total = summarize_all_in_3_lines(df_total)
+# df_total = summarize_all_in_3_lines(df_total)
 
 # ✅ 10. 중요 기사 선별 함수
 
