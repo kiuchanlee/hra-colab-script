@@ -80,6 +80,19 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
     # ✅ URL 필터링 (네이버 뉴스 본문 URL만)
     df = df[df["URL"].str.startswith("https://n.news.naver.com/mnews")].reset_index(drop=True)
 
+
+    
+    df = pd.DataFrame({
+        "구분": "",
+        "키워드": df["검색어"],
+        "일자": df["날짜"],
+        "헤드라인": df["제목"],
+        "본문": df["요약"],
+        "매체명": df["언론사"],
+        "URL": df["URL"]
+    })
+    
+
     return df
 
 if __name__ == "__main__":
