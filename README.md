@@ -1,2 +1,2 @@
 # hra-colab-script
-Daily scheduled Colab scripts
+Daily scheduled HR news scraping scripts
