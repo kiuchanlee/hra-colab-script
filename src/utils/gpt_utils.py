@@ -1,6 +1,7 @@
 # src/utils/gpt_utils.py
 
 import re
+import os
 from typing import List
 from openai import OpenAI
 import pandas as pd
