@@ -1,14 +1,12 @@
-name: Run Python Script Daily
+name: Run News Scraper Daily
 
 on:
   schedule:
-    - cron: '30 6 * * *'
-
+    - cron: '30 6 * * *'   # 매일 한국 시간 15:30 실행
   workflow_dispatch:
   push:
     branches:
       - main
-
 
 jobs:
   run-script:
@@ -16,18 +14,17 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install numpy pandas matplotlib scikit-learn gspread google-auth
 
     - name: Create creds.json from Secret
       run: |
@@ -35,32 +32,22 @@ jobs:
         ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         EOF
 
+    - name: Set environment variables
+      run: |
+        echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> $GITHUB_ENV
+        echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> $GITHUB_ENV
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+        echo "SHEET_ID=${{ secrets.SHEET_ID }}" >> $GITHUB_ENV
+        echo "SHEET_NAME=네이버API(첨부파일용)" >> $GITHUB_ENV
 
-    - name: Run Python script
-      run: python hra_news_step0.py  # 여기를 실제 스크립트 파일명으로 맞추세요
-      env:
-         NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
-         NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+    - name: Run Full Main Pipeline
+      run: |
+        python src/main_pipeline.py
 
-    - name: Upload CSV
+    - name: Upload Collected Data
       uses: actions/upload-artifact@v4
       with:
-        name: crawled-news-csv-step0
-        path: crawled_news.csv
-
-
-    - name: Run Python script
-      run: python hra_news_step1.py  # 여기를 실제 스크립트 파일명으로 맞추세요
-
-
-    - name: Upload CSV
-      uses: actions/upload-artifact@v4
-      with:
-        name: crawled-news-csv-step1
-        path: crawled_news.csv
-
-
-    - name: Run Python script
-      run: python hra_news_step2.py  # 여기를 실제 스크립트 파일명으로 맞추세요
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        name: crawled-news-data
+        path: |
+          data/
+          logs/
