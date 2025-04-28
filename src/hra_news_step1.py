@@ -1,26 +1,29 @@
+# src/hra_news_step1.py
+
 import pandas as pd
 import html
 import re
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+import os
+import sys
+
+from utils.logger import log_info, log_error
+from utils.file_manager import get_today_folder, get_today_filename
 
 # 본문 스크랩핑 함수
 def get_naver_news_body(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     try:
         response = requests.get(url, headers=headers, timeout=10)
         response.encoding = 'utf-8'
+        if response.status_code != 200:
+            return f"❌ 요청 실패: {response.status_code}"
     except Exception as e:
         return f"❌ 요청 실패: {e}"
 
-    if response.status_code != 200:
-        return f"❌ 요청 실패: {response.status_code}"
-
     soup = BeautifulSoup(response.text, 'html.parser')
-
     content = soup.find('article', {'id': 'dic_area'})
     if not content:
         return "❌ 본문이 존재하지 않음"
@@ -28,18 +31,22 @@ def get_naver_news_body(url):
     text = content.get_text(separator="\n", strip=True)
     return text
 
-def main():
-    print("📥 뉴스 데이터 불러오는 중...")
-    try:
-        df = pd.read_csv("crawled_news.csv", encoding="utf-8-sig")
-    except Exception as e:
-        print(f"❌ 파일 로딩 실패: {e}")
-        return
 
-    # 1. tqdm 진행바 적용
+def main():
+    log_info("\ud83d\udcc5 뉴스 데이터 불러오는 중...")
+    today_folder = get_today_folder()
+    input_file = os.path.join(today_folder, get_today_filename("step0_raw.csv"))
+    output_file = os.path.join(today_folder, get_today_filename("step1_processed.csv"))
+
+    try:
+        df = pd.read_csv(input_file, encoding="utf-8-sig")
+    except Exception as e:
+        log_error(f"❌ 파일 로딩 실패: {e}")
+        sys.exit(1)
+
     tqdm.pandas()
 
-    # 2. 언론사 도메인 → 한글 언론사명 매핑
+    # 언론사 도메인 → 한글 언론사명 매핑
     domain_to_korean = {
         "www.chosun.com": "조선일보",
         "biz.chosun.com": "조선비즈",
@@ -63,18 +70,20 @@ def main():
     }
     df["매체명"] = df["매체명"].map(domain_to_korean).fillna(df["매체명"])
 
-    # 3. 제목 HTML 디코딩 + [대괄호] 제거
+    # 제목 HTML 디코딩 + [대괄호] 제거
     df["헤드라인"] = df["헤드라인"].apply(html.unescape)
     df["헤드라인"] = df["헤드라인"].str.replace(r"\[.*?\]", "", regex=True).str.strip()
 
-    # 4. 본문 수집
-    print("📰 기사 본문 수집 중...")
+    # 기사 본문 수집
+    log_info("\ud83d\udcf0 기사 본문 수집 중...")
     df["본문"] = df["URL"].progress_apply(get_naver_news_body)
 
-    # 5. 인덱스 초기화 후 저장
+    # 저장
+    os.makedirs(today_folder, exist_ok=True)
     df = df.reset_index(drop=True)
-    df.to_csv("crawled_news.csv", index=False, encoding="utf-8-sig")
-    print("✅ 저장 완료: crawled_news.csv")
+    df.to_csv(output_file, index=False, encoding="utf-8-sig")
+    log_info(f"✅ 저장 완료: {output_file}")
+
 
 if __name__ == "__main__":
     main()
