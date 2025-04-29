@@ -131,7 +131,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, get_today_filename("step0_raw.csv"))
 
-    df.to_csv(output_file, index=False, encoding="utf-8-sig")
+    df.to_csv(output_file, index=False, encoding="utf-8-sig", errors='ignore')
     log_info(f"📄 결과 저장 완료: {output_file}")
 
 
