@@ -1,3 +1,5 @@
+# src/utils/logger.py
+
 import os
 from datetime import datetime
 
@@ -15,6 +17,10 @@ def _log(message, level="INFO"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     full_message = f"[{level}] {timestamp} - {message}"
 
-    print(full_message)
+    try:
+        print(full_message)
+    except UnicodeEncodeError:
+        print(full_message.encode('utf-8', 'ignore').decode('utf-8'))
+
     with open(log_path, "a", encoding="utf-8") as f:
         f.write(full_message + "\n")
