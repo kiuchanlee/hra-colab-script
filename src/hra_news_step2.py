@@ -48,14 +48,21 @@ def main():
     df.to_csv(output_file, index=False, encoding="utf-8-sig")
     log_info(f"✅ 최종 결과 저장 완료: {output_file}")
 
+      
     # 5. Google Sheets 업로드
-    sheet_id = os.getenv("SHEET_ID")
-    sheet_name = os.getenv("SHEET_NAME", "네이버API(첨부파일용)")
+    sheet_id = "1l89Eca3CsjLEjG-9_raVMy6Y_sYE4BLA-XRtgwEhHEc"  # ✅ 직접 입력
+    sheet_name = "네이버API(첨부파일용)"  # ✅ 직접 입력
 
-    if sheet_id:
+    if not sheet_id:
+        log_error("❌ Google Sheet ID가 코드에 설정되어 있지 않습니다. (sheet_id)")
+        sys.exit(1)
+
+    try:
         upload_to_google_sheet(df, sheet_id, sheet_name)
-    else:
-        log_error("❌ Google Sheet ID 환경변수(SHEET_ID)가 설정되어 있지 않습니다.")
+        log_info(f"✅ Google Sheets 업로드 완료 ({sheet_name})")
+    except Exception as e:
+        log_error(f"❌ Google Sheets 업로드 실패: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
