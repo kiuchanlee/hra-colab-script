@@ -54,6 +54,10 @@ def main():
     df["헤드라인"] = df["헤드라인"].apply(html.unescape)
     df["헤드라인"] = df["헤드라인"].str.replace(r"\[.*?\]", "", regex=True).str.strip()
 
+    
+    # ✅ 중복 제거 먼저
+    df = deduplicate_news_with_gpt_twopass(df)
+    
     # ✅ GPT 분석 실행
     df = analyze_articles_batch(df)
 
