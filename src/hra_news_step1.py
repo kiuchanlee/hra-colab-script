@@ -8,7 +8,8 @@ from datetime import datetime
 from utils.logger import log_info, log_error
 from utils.file_manager import get_today_folder, get_today_filename
 from utils.gpt_utils import analyze_articles_batch
-
+from utils.gpt_utils import deduplicate_news_with_gpt
+from utils.gpt_utils import deduplicate_news_with_gpt_twopass 
 
 def main():
     log_info("📄 뉴스 헤드라인 데이터 불러오는 중...")
