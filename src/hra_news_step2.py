@@ -11,7 +11,7 @@ from datetime import datetime
 from utils.logger import log_info, log_error
 from utils.file_manager import get_today_folder, get_today_filename
 from utils.gpt_utils import analyze_articles_batch
-from utils.sheet_uploader import upload_to_google_sheet
+from utils.google_sheet_utils import upload_to_google_sheet
 
 # ✅ 본문 수집 함수
 
