@@ -76,7 +76,7 @@ def analyze_articles_batch(df: pd.DataFrame, batch_size=5, max_retries=5) -> pd.
     def run_batch(batch_df, index_map):
         prompt_lines = []
         for i, idx in enumerate(batch_df.index, 1):
-            prompt_lines.append(f"{i}. {batch_df.at[idx, '헤드라인']}")
+            prompt_lines.append(f"{i}. {batch_df.at[idx, '요약']}")
             index_map[i] = idx
 
         prompt = "\n".join(prompt_lines)
