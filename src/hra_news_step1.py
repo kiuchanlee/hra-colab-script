@@ -48,6 +48,8 @@ def main():
 
     # 언론사 도메인 → 한글 언론사명 매핑
     domain_to_korean = {
+        "shindonga.donga.com" : "월간 신동아"
+        "magazine.hankyung.com" : "매거진 한경"
         "www.chosun.com": "조선일보",
         "biz.chosun.com": "조선비즈",
         "weekly.chosun.com": "주간조선",
