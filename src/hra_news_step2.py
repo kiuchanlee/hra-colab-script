@@ -1,20 +1,42 @@
-# src/hra_news_step2.py
+# src/hra_news_step2.py - 본문 수집 + 요약 + 시트 업로드
 
 import os
 import sys
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+from tqdm import tqdm
 from datetime import datetime
 
 from utils.logger import log_info, log_error
 from utils.file_manager import get_today_folder, get_today_filename
-from utils.gpt_utils import deduplicate_news_with_gpt_twopass, analyze_articles_batch
-from utils.google_sheet_utils import upload_to_google_sheet
+from utils.gpt_utils import summarize_all_in_3_lines, analyze_articles_batch
+from utils.sheet_uploader import upload_to_google_sheet
+
+# ✅ 본문 수집 함수
+
+def get_naver_news_body(url):
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.encoding = 'utf-8'
+        if response.status_code != 200:
+            return f"❌ 요청 실패: {response.status_code}"
+    except Exception as e:
+        return f"❌ 요청 실패: {e}"
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    content = soup.find('article', {'id': 'dic_area'})
+    if not content:
+        return "❌ 본문이 존재하지 않음"
+
+    return content.get_text(separator="\n", strip=True)
 
 
 def main():
-    log_info("\ud83d\udcc5 뉴스 데이터 로드 중...")
+    log_info("📄 중요 기사 로드 중...")
     today_folder = get_today_folder()
-    input_file = os.path.join(today_folder, get_today_filename("step1_processed.csv"))
+    input_file = os.path.join(today_folder, get_today_filename("step1_filtered.csv"))
     output_file = os.path.join(today_folder, get_today_filename("step2_final.csv"))
 
     try:
@@ -23,50 +45,27 @@ def main():
         log_error(f"❌ 파일 로딩 실패: {e}")
         sys.exit(1)
 
-    log_info(f"✅ 데이터 로드 완료: {len(df)}건")
+    log_info(f"✅ 중요 기사 수: {len(df)}건")
 
-    # 1. GPT 중복 제거
-    df = deduplicate_news_with_gpt_twopass(df)
+    # ✅ 본문 수집
+    log_info("📰 중요 기사 본문 수집 중...")
+    tqdm.pandas()
+    df["본문"] = df["URL"].progress_apply(get_naver_news_body)
 
-    # 2. 중요도 분석
-    df = analyze_articles_batch(df)
-    
-    
-    # ✅ 중요도 필터 적용 (3점 이상만 남김)
-    df = df[df["중요도"] >= 3]
+    # ✅ 요약 (선택 적용)
+    df = summarize_all_in_3_lines(df)
 
-    # 3. 컬럼 정리 및 정렬
-    df = df[[
-        "키워드", "일자", "헤드라인", "매체명", "본문",
-        "대기업 관련", "HR 관련", "정책/법안 관련", "경제/산업 관련",
-        "보험/금융 관련", "중요도", "중요여부"
-    ]].copy()
-
-    df = df.sort_values(
-        by=["중요도", "키워드", "일자", "헤드라인"],
-        ascending=[False, True, False, False]
-    ).reset_index(drop=True)
-
-    # 4. 저장
-    os.makedirs(today_folder, exist_ok=True)
-    df.to_csv(output_file, index=False, encoding="utf-8-sig")
-    log_info(f"✅ 최종 결과 저장 완료: {output_file}")
-
-      
-    # 5. Google Sheets 업로드
-    sheet_id = "1l89Eca3CsjLEjG-9_raVMy6Y_sYE4BLA-XRtgwEhHEc"  # ✅ 직접 입력
-    sheet_name = "네이버API(첨부파일용)"  # ✅ 직접 입력
-
-    if not sheet_id:
-        log_error("❌ Google Sheet ID가 코드에 설정되어 있지 않습니다. (sheet_id)")
-        sys.exit(1)
-
+    # ✅ 시트 업로드
+    sheet_id = "1l89Eca3CsjLEjG-9_raVMy6Y_sYE4BLA-XRtgwEhHEc"  # <- 필요 시 수정
+    sheet_name = "네이버API(첨부파일용)"
     try:
         upload_to_google_sheet(df, sheet_id, sheet_name)
-        log_info(f"✅ Google Sheets 업로드 완료 ({sheet_name})")
     except Exception as e:
         log_error(f"❌ Google Sheets 업로드 실패: {e}")
-        sys.exit(1)
+
+    # ✅ 최종 저장
+    df.to_csv(output_file, index=False, encoding="utf-8-sig")
+    log_info(f"✅ 최종 결과 저장 완료: {output_file}")
 
 
 if __name__ == "__main__":
