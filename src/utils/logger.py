@@ -17,10 +17,13 @@ def _log(message, level="INFO"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     full_message = f"[{level}] {timestamp} - {message}"
 
+    # 출력 안전 처리
     try:
         print(full_message)
     except UnicodeEncodeError:
         print(full_message.encode('utf-8', 'ignore').decode('utf-8'))
 
+    # 파일 기록도 안전 처리
+    safe_message = full_message.encode('utf-8', 'ignore').decode('utf-8')
     with open(log_path, "a", encoding="utf-8") as f:
-        f.write(full_message + "\n")
+        f.write(safe_message + "\n")
