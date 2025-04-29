@@ -30,6 +30,10 @@ def main():
 
     # 2. 중요도 분석
     df = analyze_articles_batch(df)
+    
+    
+    # ✅ 중요도 필터 적용 (3점 이상만 남김)
+    df = df[df["중요도"] >= 3]
 
     # 3. 컬럼 정리 및 정렬
     df = df[[
