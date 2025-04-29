@@ -81,7 +81,7 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
         "키워드": df["검색어"],
         "일자": df["날짜"],
         "헤드라인": df["제목"],
-        "본문": df["요약"],
+        "요약": df["요약"],
         "매체명": df["언론사"],
         "URL": df["URL"]
     })
