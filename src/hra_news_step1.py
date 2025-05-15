@@ -47,7 +47,12 @@ def main():
         "news.heraldcorp.com": "헤럴드경제",
         "www.fnnews.com": "파이낸셜뉴스",
         "news.mt.co.kr": "머니투데이",
-        "www.sisain.co.kr": "시사IN"
+        "www.sisain.co.kr": "시사IN",
+        "sports.khan.co.kr" : "스포츠경향",
+        "sports.donga.com" : "스포츠동아",
+        "insweek.co.kr" : "보험신보",
+        "insjournal.co.kr" : "보험저널",
+        "insnews.co.kr" : "한국보험신문"
     }
     df["매체명"] = df["매체명"].map(domain_to_korean).fillna(df["매체명"])
 
