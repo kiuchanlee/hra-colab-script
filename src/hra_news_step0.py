@@ -153,7 +153,7 @@ def main():
     "KB손보 인사", "KB손보 임원진", "KB손보 조직", "KB손보 경영진", "KB손보 조직개편", "KB손보 영입", "KB손보 출신", "KB손보 사외이사",
     "메리츠 인사", "메리츠 임원진", "메리츠 조직", "메리츠 경영진", "메리츠 조직개편", "메리츠 영입", "메리츠 출신", "메리츠 사외이사",
     "손보사 조직 개편", "생보사 조직 개편", "보험사 사외이사", "손보사 생보사 사외이사", "손보 전략적 제휴", "생보 전략적 제휴",
-    "금융권 조직", "보험사 조직", "손보 영입", "금융권 영입"
+    "금융권 조직", "보험사 조직", "손보 영입", "금융권 영입", "보험업계 영입", "보험업계 신설"
         
     ]
 
@@ -166,7 +166,7 @@ def main():
             "www.chosun.com", "joins.com", "donga.com", "khan.co.kr", "hani.co.kr",
             "hankyung.com", "mk.co.kr", "hankookilbo.com", "biz.chosun.com",
             "asiae.co.kr", "edaily.co.kr", "news.heraldcorp.com", "fnnews.com",
-            "mt.co.kr", "magazine.mk.co.kr", "sisain.co.kr", "weekly.chosun.com"
+            "mt.co.kr", "magazine.mk.co.kr", "sisain.co.kr", "weekly.chosun.com", "insnews.co.kr", "insjournal.co.kr", "insweek.co.kr"
         ]
     )
 
