@@ -73,9 +73,15 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
         all_results.extend(query_results)
 
     df = pd.DataFrame(all_results)
-    df = df.drop_duplicates(subset=["URL"])
-    df = df[df["URL"].str.startswith("https://n.news.naver.com/mnews")].reset_index(drop=True)
 
+    # URL 컬럼 안전성 확보
+    df = df[df["URL"].notna()]
+    
+    # Naver 모바일 뉴스만 필터 + 중복 제거
+    df = df.drop_duplicates(subset=["URL"])
+    df = df[df["URL"].astype(str).str.startswith("https://n.news.naver.com/mnews")]
+    
+    # 최종 컬럼 재구성
     df = pd.DataFrame({
         "구분": "",
         "키워드": df["검색어"],
@@ -85,6 +91,17 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
         "매체명": df["언론사"],
         "URL": df["URL"]
     })
+    
+    # ⚠️ 중요: 연속 인덱스 보장 + 절대 위치 ID 심기
+    df = df.reset_index(drop=True)
+    df["row_id"] = df.index  # 0..n-1 절대 위치
+    
+    # (선택) 재현성을 위해 정렬 고정
+    df = df.sort_values(["일자", "키워드", "URL"]).reset_index(drop=True)
+    df["row_id"] = df.index  # 정렬 후 다시 맞춤
+    
+    # 저장
+    df.to_csv(output_file, index=False, encoding="utf-8-sig")
 
     return df
 
