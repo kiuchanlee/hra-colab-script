@@ -81,8 +81,10 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
     
         # 중복/필터/재구성
         df = df.drop_duplicates(subset=["URL"])
-        df = df[df["URL"].astype(str).startswith("https://n.news.naver.com/mnews")].reset_index(drop=True)
-    
+        # df = df[df["URL"].astype(str).startswith("https://n.news.naver.com/mnews")].reset_index(drop=True)
+        urls = df["URL"].astype("string")
+        df = df[urls.str.startswith("https://n.news.naver.com/mnews", na=False)].reset_index(drop=True)
+
         df = pd.DataFrame({
             "구분": "",
             "키워드": df["검색어"],
