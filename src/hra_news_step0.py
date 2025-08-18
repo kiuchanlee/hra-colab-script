@@ -97,7 +97,7 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
         df["row_id"] = df.index  # 0..n-1
     
         # ⛔️ 여기 있던 df.to_csv(output_file, ...) 라인은 삭제!
-  return df
+        return df
 
 
 
