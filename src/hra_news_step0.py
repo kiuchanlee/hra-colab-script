@@ -72,38 +72,34 @@ def search_naver_news_multi(queries, client_id, client_secret, display=300, filt
         log_info(f"✅ '{query}' 완료 - {len(query_results)}건 수집")
         all_results.extend(query_results)
 
-    df = pd.DataFrame(all_results)
+       # 결과 DF 구성
+        df = pd.DataFrame(all_results)
+    
+        # 빈 결과면 컬럼만 맞춰서 반환 (step1에서 컬럼 기대 충족)
+        if df.empty:
+            return pd.DataFrame(columns=["구분","키워드","일자","헤드라인","요약","매체명","URL","row_id"])
+    
+        # 중복/필터/재구성
+        df = df.drop_duplicates(subset=["URL"])
+        df = df[df["URL"].astype(str).startswith("https://n.news.naver.com/mnews")].reset_index(drop=True)
+    
+        df = pd.DataFrame({
+            "구분": "",
+            "키워드": df["검색어"],
+            "일자": df["날짜"],
+            "헤드라인": df["제목"],
+            "요약": df["요약"],
+            "매체명": df["언론사"],
+            "URL": df["URL"]
+        }).reset_index(drop=True)
+    
+        # step1 안전성 위해 절대 위치 id 심기
+        df["row_id"] = df.index  # 0..n-1
+    
+        # ⛔️ 여기 있던 df.to_csv(output_file, ...) 라인은 삭제!
+  return df
 
-    # URL 컬럼 안전성 확보
-    df = df[df["URL"].notna()]
-    
-    # Naver 모바일 뉴스만 필터 + 중복 제거
-    df = df.drop_duplicates(subset=["URL"])
-    df = df[df["URL"].astype(str).str.startswith("https://n.news.naver.com/mnews")]
-    
-    # 최종 컬럼 재구성
-    df = pd.DataFrame({
-        "구분": "",
-        "키워드": df["검색어"],
-        "일자": df["날짜"],
-        "헤드라인": df["제목"],
-        "요약": df["요약"],
-        "매체명": df["언론사"],
-        "URL": df["URL"]
-    })
-    
-    # ⚠️ 중요: 연속 인덱스 보장 + 절대 위치 ID 심기
-    df = df.reset_index(drop=True)
-    df["row_id"] = df.index  # 0..n-1 절대 위치
-    
-    # (선택) 재현성을 위해 정렬 고정
-    df = df.sort_values(["일자", "키워드", "URL"]).reset_index(drop=True)
-    df["row_id"] = df.index  # 정렬 후 다시 맞춤
-    
-    # 저장
-    df.to_csv(output_file, index=False, encoding="utf-8-sig")
 
-    return df
 
 
 def main():
