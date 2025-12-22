@@ -90,7 +90,7 @@ def main():
         "www.edaily.co.kr": "이데일리",
         "news.heraldcorp.com": "헤럴드경제",
         "www.fnnews.com": "파이낸셜뉴스",
-        "news.mt.co.kr": "머니투데이",
+        "www.mt.co.kr": "머니투데이",
         "www.sisain.co.kr": "시사IN",
         "sports.khan.co.kr": "스포츠경향",
         "sports.donga.com": "스포츠동아",
