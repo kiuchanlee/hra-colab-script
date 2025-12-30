@@ -84,6 +84,8 @@ def main():
         "www.hani.co.kr": "한겨레",
         "www.hankyung.com": "한국경제",
         "www.mk.co.kr": "매일경제",
+        "h21.hani.co.kr": "한겨레21",
+        "insnews.co.kr": "한국보험신문"
         "www.magazine.mk.co.kr": "매경이코노미",
         "www.hankookilbo.com": "한국일보",
         "view.asiae.co.kr": "아시아경제",
