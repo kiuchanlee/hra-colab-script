@@ -5,4 +5,4 @@ from hra_news_step2 import main as step2_main
 if __name__ == "__main__":
     step0_main()
     step1_main()
-    step2_main()
+# --    step2_main()
