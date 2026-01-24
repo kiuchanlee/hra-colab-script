@@ -36,7 +36,7 @@ def main():
     sheet_id = os.getenv("SHEET_ID")
 
     log_info(f"🔎 디버깅 - SHEET_ID: {sheet_id}")
-    log_info(f"🔎 디버깅 - SHEET_NAME: {sheet_name}")
+    # log_info(f"🔎 디버깅 - SHEET_NAME: {sheet_name}")
 
     if sheet_id:
         try:
