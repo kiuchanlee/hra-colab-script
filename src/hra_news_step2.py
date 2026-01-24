@@ -34,6 +34,10 @@ def main():
     df["본문"] = bodies
 
     sheet_id = os.getenv("SHEET_ID")
+
+    log_info(f"🔎 디버깅 - SHEET_ID: {sheet_id}")
+    log_info(f"🔎 디버깅 - SHEET_NAME: {sheet_name}")
+
     if sheet_id:
         try:
             upload_to_google_sheet(df.drop(columns=['row_id'], errors='ignore'), sheet_id, "네이버API(첨부파일용)")
