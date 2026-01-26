@@ -63,7 +63,15 @@ def main():
         "www.chosun.com": "조선일보", "biz.chosun.com": "조선비즈", 
         "www.hankyung.com": "한국경제", "www.mk.co.kr": "매일경제",
         "www.edaily.co.kr": "이데일리", "www.mt.co.kr": "머니투데이",
-        "insnews.co.kr": "한국보험신문", "insjournal.co.kr": "보험저널"
+        "insnews.co.kr": "한국보험신문", "insjournal.co.kr": "보험저널",
+        "joins.com" : "중앙일보", "donga.com" : "동아일보",
+        "magazine.hankyung.com" : "매거진한경", "hani.co.kr" : "한겨레",
+        "hankookilbo.com" : "한국일보", "asiae.co.kr" : "아시아경제",
+        "heraldcorp.com" : "헤럴드경제", "fnnews.com" : "파이낸셜뉴스",
+        "mk.co.kr" : "매일경제", "sisain.co.kr" : "시사인", 
+        "weekly.chosun.com" : "주간조선", "insweek.co.kr" : "보험신보",
+        "KHAN.CO.KR" : "경향신문", "WEEKLY.DONGA.COM" : "주간경향", 
+        "WEEKLY.DONGA.COM" : "주간동아"
     }
     df["매체명"] = df["매체명"].map(domain_to_korean).fillna(df["매체명"])
 
