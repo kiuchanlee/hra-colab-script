@@ -181,10 +181,10 @@ def main():
               ] # (기존 쿼리 리스트 유지)
     filter_domains = [
 
-            "www.chosun.com", "joins.com", "donga.com", "khan.co.kr", "hani.co.kr",
-            "hankyung.com", "mk.co.kr", "hankookilbo.com", "biz.chosun.com",
-            "asiae.co.kr", "edaily.co.kr", "news.heraldcorp.com", "fnnews.com",
-            "mt.co.kr", "magazine.mk.co.kr", "sisain.co.kr", "weekly.chosun.com", "insnews.co.kr", "insjournal.co.kr", "insweek.co.kr"
+            "www.chosun.com", "www.joins.com", "www.donga.com", "www.khan.co.kr", "www.hani.co.kr",
+            "www.hankyung.com", "www.mk.co.kr", "www.hankookilbo.com", "biz.chosun.com",
+            "view.asiae.co.kr", "www.edaily.co.kr", "news.heraldcorp.com", "www.fnnews.com",
+            "www.mt.co.kr", "magazine.mk.co.kr", "www.sisain.co.kr", "weekly.chosun.com", "www.insnews.co.kr", "www.insjournal.co.kr", "www.insweek.co.kr"
         
     ] # (기존 도메인 리스트 유지)
     
