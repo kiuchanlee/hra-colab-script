@@ -2,7 +2,7 @@ name: Run News Scraper Daily
 
 on:
   schedule:
-    - cron: '30 6 * * *'   # 매일 한국 시간 15:30 실행
+    - cron: '53 6 * * *'   # 매일 한국 시간 15:53 실행
   workflow_dispatch:
   push:
     branches:
